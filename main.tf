@@ -1,8 +1,17 @@
-provider "azurerm" {
-features {}
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 4.0"
+    }
+  }
 }
 
-resource "azurerm-resource-group" "myrg" {
-name = "RG-Test01"
-location = "east-us"
+provider "azurerm" {
+  features {}
+}
+
+resource "azurerm_resource_group" "rg" {
+  name     = "demo-rg-001"
+  location = "East US"
 }
