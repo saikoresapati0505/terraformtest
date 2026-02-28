@@ -1,21 +1,45 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
 - main
 
 pool:
-  name: Agentpool-01
+  name: Agentpool-01   # Make sure this matches exactly
+
+variables:
+  workingDirectory: $(System.DefaultWorkingDirectory)
 
 steps:
-- task: AzureCLI@2
+
+# Install specific Terraform version (from extension)
+- task: TerraformInstaller@1
+  displayName: Install Terraform
   inputs:
-    azureSubscription: 'Terraformkey'
-    scriptType: 'ps'
-    scriptLocation: 'inlineScript'
-    inlineScript: |
-      terraform init
-      terraform plan
-      terraform apply -auto-approve
+    terraformVersion: '1.6.6'
+
+# Terraform Init
+- task: TerraformTaskV4@4
+  displayName: Terraform Init
+  inputs:
+    provider: 'azurerm'
+    command: 'init'
+    backendServiceArm: 'Terraformkey'
+    backendAzureRmUseEnvironmentVariablesForAuthentication: false
+    workingDirectory: '$(workingDirectory)'
+
+# Terraform Plan
+- task: TerraformTaskV4@4
+  displayName: Terraform Plan
+  inputs:
+    provider: 'azurerm'
+    command: 'plan'
+    environmentServiceNameAzureRM: 'Terraformkey'
+    workingDirectory: '$(workingDirectory)'
+
+# Terraform Apply
+- task: TerraformTaskV4@4
+  displayName: Terraform Apply
+  inputs:
+    provider: 'azurerm'
+    command: 'apply'
+    environmentServiceNameAzureRM: 'Terraformkey'
+    workingDirectory: '$(workingDirectory)'
+    args: '-auto-approve'
