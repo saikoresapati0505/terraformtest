@@ -21,9 +21,7 @@ steps:
   inputs:
     provider: 'azurerm'
     command: 'init'
-    backendServiceArm: 'Terraformkey'
-    backendAzureRmUseEnvironmentVariablesForAuthentication: false
-    workingDirectory: '$(workingDirectory)'
+    environmentServiceNameAzureRM: 'Terraformkey'
 
 # Terraform Plan
 - task: TerraformTaskV4@4
@@ -32,7 +30,6 @@ steps:
     provider: 'azurerm'
     command: 'plan'
     environmentServiceNameAzureRM: 'Terraformkey'
-    workingDirectory: '$(workingDirectory)'
 
 # Terraform Apply
 - task: TerraformTaskV4@4
@@ -41,5 +38,4 @@ steps:
     provider: 'azurerm'
     command: 'apply'
     environmentServiceNameAzureRM: 'Terraformkey'
-    workingDirectory: '$(workingDirectory)'
     args: '-auto-approve'
