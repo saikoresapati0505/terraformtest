@@ -13,6 +13,11 @@ steps:
 - script: terraform --version
   displayName: 'Check Terraform Version'
 
+- script: |
+    rmdir /s /q .terraform
+    del terraform.lock.hcl
+  displayName: 'Clean Terraform Cache'
+
 - script: terraform init
   displayName: 'Terraform Init'
 
