@@ -1,0 +1,18 @@
+trigger:
+- main
+
+pool:
+  name: Agentpool-01   # Must match EXACT pool name
+
+steps:
+
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'Terraformkey'   # Your service connection name
+    scriptType: 'ps'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      terraform --version
+      terraform init
+      terraform plan
+      terraform apply -auto-approve
